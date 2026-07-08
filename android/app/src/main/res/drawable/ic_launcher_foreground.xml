@@ -1,0 +1,11 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp" android:height="108dp"
+    android:viewportWidth="108" android:viewportHeight="108">
+    <!-- Simple tank + sound-wave glyph. -->
+    <path android:fillColor="#FFFFFF"
+        android:pathData="M42,32h24a4,4 0 0 1 4,4v40a6,6 0 0 1 -6,6H44a6,6 0 0 1 -6,-6V36a4,4 0 0 1 4,-4z" />
+    <path android:strokeColor="#FFD166" android:strokeWidth="3" android:fillColor="#00000000"
+        android:pathData="M74,44c6,6 6,20 0,26" />
+    <path android:strokeColor="#FFD166" android:strokeWidth="3" android:fillColor="#00000000"
+        android:pathData="M80,38c10,10 10,32 0,42" />
+</vector>
