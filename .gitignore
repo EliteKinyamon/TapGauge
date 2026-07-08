@@ -1,0 +1,26 @@
+# --- Snowsight Workspaces artifacts ---
+# Workspaces is stage-backed; stages have no real directories, so the Workspace
+# writes a hidden ".folder" marker file into each folder to persist structure.
+# These are local-only bookkeeping and must NOT be pushed to GitHub.
+.folder
+**/.folder
+
+# --- Android / Gradle ---
+*.iml
+.gradle/
+local.properties
+.idea/
+.DS_Store
+build/
+/build
+/app/build
+captures/
+.externalNativeBuild
+.cxx
+*.apk
+*.aab
+
+# --- Python prototype ---
+__pycache__/
+*.pyc
+.venv/
