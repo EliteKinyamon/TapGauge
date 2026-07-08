@@ -9,11 +9,16 @@ class Converters {
     @TypeConverter fun shapeToString(s: TankShape): String = s.name
     @TypeConverter fun stringToShape(s: String): TankShape =
         runCatching { TankShape.valueOf(s) }.getOrDefault(TankShape.UNKNOWN)
+
+    @TypeConverter fun typeToString(t: TankType): String = t.name
+    @TypeConverter fun stringToType(s: String): TankType =
+        runCatching { TankType.valueOf(s) }.getOrDefault(TankType.OTHER)
 }
 
 @Database(
     entities = [TankProfileEntity::class, CalibrationPointEntity::class],
-    version = 1,
+    // v2: RV re-scope added TankType + capacityGallons columns (section 1).
+    version = 2,
     exportSchema = false,
 )
 @TypeConverters(Converters::class)

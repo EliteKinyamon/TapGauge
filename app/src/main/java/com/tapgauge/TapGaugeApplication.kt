@@ -11,7 +11,11 @@ import com.tapgauge.data.TankProfileRepository
  */
 class TapGaugeApplication : Application() {
     val database: TapGaugeDatabase by lazy {
-        Room.databaseBuilder(this, TapGaugeDatabase::class.java, "tapgauge.db").build()
+        Room.databaseBuilder(this, TapGaugeDatabase::class.java, "tapgauge.db")
+            // v1->v2 added TankType + capacityGallons. No field data exists yet, so a
+            // destructive migration is acceptable rather than a hand-written one (re-scope section 1).
+            .fallbackToDestructiveMigration()
+            .build()
     }
     val repository: TankProfileRepository by lazy {
         TankProfileRepository(database.tankProfileDao(), database.calibrationPointDao())

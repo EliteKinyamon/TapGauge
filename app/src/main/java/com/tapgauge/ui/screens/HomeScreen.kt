@@ -13,7 +13,11 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Opacity
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.WaterDrop
+import androidx.compose.material.icons.filled.Wash
+import androidx.compose.material.icons.outlined.Dashboard
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -36,7 +40,15 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import com.tapgauge.TapGaugeApplication
+import com.tapgauge.data.TankType
 import com.tapgauge.ui.components.CalibrationConfidenceBadge
+
+private fun iconFor(type: TankType) = when (type) {
+    TankType.FRESH -> Icons.Filled.WaterDrop
+    TankType.GREY -> Icons.Filled.Wash
+    TankType.BLACK -> Icons.Filled.Opacity
+    TankType.OTHER -> Icons.Outlined.Dashboard
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -95,7 +107,12 @@ fun HomeScreen(
                                 horizontalArrangement = Arrangement.SpaceBetween,
                                 verticalAlignment = Alignment.CenterVertically,
                             ) {
-                                Text(s.entity.name, style = MaterialTheme.typography.titleMedium)
+                                Row(verticalAlignment = Alignment.CenterVertically) {
+                                    Icon(iconFor(s.entity.type), contentDescription = null)
+                                    Spacer(Modifier.height(0.dp))
+                                    Text("  " + s.entity.name,
+                                        style = MaterialTheme.typography.titleMedium)
+                                }
                                 val pct = s.lastPercent
                                 Text(
                                     if (pct != null) "${pct.toInt()}%" else "\u2014",
@@ -105,6 +122,15 @@ fun HomeScreen(
                             }
                             Spacer(Modifier.height(8.dp))
                             CalibrationConfidenceBadge(s.confidence)
+                            Text(
+                                when (val d = s.lastCalibratedDaysAgo) {
+                                    null -> "Not calibrated yet"
+                                    0L -> "Calibrated today"
+                                    1L -> "Calibrated 1 day ago"
+                                    else -> "Calibrated $d days ago"
+                                },
+                                style = MaterialTheme.typography.bodySmall,
+                            )
                         }
                     }
                 }

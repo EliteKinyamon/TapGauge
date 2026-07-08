@@ -32,12 +32,13 @@ import kotlinx.coroutines.launch
 private data class Page(val title: String, val body: String)
 
 private val pages = listOf(
-    Page("Know your tank\u2019s level by tapping it",
-        "Tap your propane, water, or fuel tank with a knuckle or coin. TapGauge listens to the pitch and estimates how full it is."),
-    Page("No sensor to buy or install \u2014 just your phone",
-        "Other products make you attach a Bluetooth sensor. TapGauge uses only your phone\u2019s built-in microphone. Nothing to buy, nothing to stick on the tank."),
-    Page("It gets more accurate as you use it",
-        "TapGauge learns each tank when you tell it \u201cjust filled\u201d or \u201cjust ran out.\u201d It needs your microphone, and this is an estimate \u2014 not a certified safety gauge."),
+    // Re-scope section 4: open with the pain point in plain terms, not a physics lecture.
+    Page("For the tank sensor RVers already know is lying to them",
+        "Factory fresh/grey/black tank sensors are notorious for false readings \u2014 residue coats the probes and they read wrong for months. TapGauge skips the probes entirely: it listens to the tank instead. No sensor to buy or install \u2014 just your phone."),
+    Page("How it works",
+        "Tap the tank with a knuckle. The pitch of the sound changes with the fill level \u2014 like blowing across a bottle as it empties. TapGauge measures that pitch with your phone\u2019s mic and turns it into a percentage."),
+    Page("It learns each tank \u2014 and stays private",
+        "You calibrate once (fresh: \u201cjust filled\u201d / grey & black: a quick clean-water Driveway Calibration at home). Everything stays on your phone \u2014 no account, no internet. This is a convenience estimate, not a certified gauge."),
 )
 
 @Composable

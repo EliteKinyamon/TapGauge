@@ -9,6 +9,7 @@ import com.tapgauge.audio.MeasurementSession
 import com.tapgauge.calibration.CalibrationEngine
 import com.tapgauge.calibration.CalibrationPoint
 import com.tapgauge.calibration.Confidence
+import com.tapgauge.data.TankType
 import com.tapgauge.dsp.AudioCaptureEngine
 import com.tapgauge.dsp.ReadingResult
 import com.tapgauge.dsp.SpectralAnalyzer
@@ -23,6 +24,7 @@ import kotlinx.coroutines.launch
 
 data class MeasureUiState(
     val tankName: String = "",
+    val tankType: TankType = TankType.OTHER,
     val measuring: Boolean = false,
     val level: Double = 0.0,
     val tapsDone: Int = 0,
@@ -65,6 +67,7 @@ class MeasureViewModel(
             _state.update {
                 it.copy(
                     tankName = tank?.name ?: "Tank",
+                    tankType = tank?.type ?: TankType.OTHER,
                     calibrationConfidence = engine.confidence(),
                     anchorCount = engine.anchorCount(),
                 )
@@ -135,6 +138,12 @@ class MeasureViewModel(
         }.takeLast(12)
         val days = CalibrationEngine.daysUntilEmpty(pts)
 
+        val notCalibratedHint = when (_state.value.tankType) {
+            TankType.GREY, TankType.BLACK ->
+                "Not calibrated yet \u2014 log \u201cJust Dumped\u201d (0%) or run Driveway Calibration."
+            else ->
+                "Not calibrated yet \u2014 log Full/Empty to start."
+        }
         _state.update {
             it.copy(
                 measuring = false, level = 0.0, lastReadingHz = hz,
@@ -142,7 +151,7 @@ class MeasureViewModel(
                 extrapolated = est.extrapolated, daysUntilEmpty = days,
                 calibrationConfidence = engine.confidence(),
                 anchorCount = engine.anchorCount(),
-                message = if (est.percent == null) "Not calibrated yet \u2014 log Full/Empty to start." else null,
+                message = if (est.percent == null) notCalibratedHint else null,
             )
         }
     }

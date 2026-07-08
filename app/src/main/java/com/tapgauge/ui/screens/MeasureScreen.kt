@@ -41,6 +41,7 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import com.tapgauge.TapGaugeApplication
+import com.tapgauge.data.TankType
 import com.tapgauge.ui.components.CalibrationConfidenceBadge
 import com.tapgauge.ui.components.LevelMeter
 import com.tapgauge.ui.components.ReadingConfidenceBadge
@@ -116,6 +117,18 @@ fun MeasureScreen(
                         color = MaterialTheme.colorScheme.error,
                         textAlign = TextAlign.Center)
                 }
+                // Per-type framing around the decision RVers actually make (re-scope section 4).
+                if (state.percent != null) {
+                    val advice = when (state.tankType) {
+                        TankType.GREY, TankType.BLACK -> "Plan your next dump."
+                        TankType.FRESH -> "Fresh water left for the trip."
+                        TankType.OTHER -> null
+                    }
+                    advice?.let {
+                        Text(it, style = MaterialTheme.typography.titleSmall,
+                            textAlign = TextAlign.Center)
+                    }
+                }
                 state.daysUntilEmpty?.let {
                     Text("~${it.toInt()} days until empty (recent rate)",
                         style = MaterialTheme.typography.bodyMedium)
@@ -136,19 +149,33 @@ fun MeasureScreen(
                         style = MaterialTheme.typography.titleMedium)
                 }
 
-                // In-context calibration shortcuts (spec section 3.4).
-                Row(
-                    Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-                ) {
-                    OutlinedButton(
-                        onClick = { vm.logAnchorFromLastReading(100.0, "full") },
-                        modifier = Modifier.weight(1f),
-                    ) { Text("This is Full") }
-                    OutlinedButton(
-                        onClick = { vm.logAnchorFromLastReading(0.0, "empty") },
-                        modifier = Modifier.weight(1f),
-                    ) { Text("Just ran Empty") }
+                // In-context calibration shortcuts, type-aware (re-scope section 3.4).
+                // You never "fill" a waste tank, so Grey/Black only offer the 0% anchor.
+                when (state.tankType) {
+                    TankType.GREY, TankType.BLACK -> {
+                        OutlinedButton(
+                            onClick = { vm.logAnchorFromLastReading(0.0, "dumped") },
+                            modifier = Modifier.fillMaxWidth(),
+                        ) { Text("Just Dumped (0%)") }
+                        Text("For in-between levels, use Driveway Calibration.",
+                            style = MaterialTheme.typography.bodySmall,
+                            textAlign = TextAlign.Center)
+                    }
+                    else -> {
+                        Row(
+                            Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        ) {
+                            OutlinedButton(
+                                onClick = { vm.logAnchorFromLastReading(100.0, "full") },
+                                modifier = Modifier.weight(1f),
+                            ) { Text("This is Full") }
+                            OutlinedButton(
+                                onClick = { vm.logAnchorFromLastReading(0.0, "empty") },
+                                modifier = Modifier.weight(1f),
+                            ) { Text("Just ran Empty") }
+                        }
+                    }
                 }
 
                 Spacer(Modifier.height(8.dp))

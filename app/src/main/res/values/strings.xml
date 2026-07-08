@@ -1,11 +1,14 @@
 <resources>
     <string name="app_name">TapGauge</string>
 
-    <!-- Positioning microcopy (spec section 7): the differentiator, stated plainly. -->
+    <!-- RV re-scope (section 0/4): lead with the identity line; the old "no sensor"
+         line is now the one-line follow-up, not the headline. -->
+    <string name="identity">TapGauge: for the tank sensor RVers already know is lying to them.</string>
     <string name="tagline">No sensor to buy or install \u2014 just your phone.</string>
 
-    <!-- Safety disclaimer (spec section 11): shown in onboarding and on results. -->
-    <string name="disclaimer">TapGauge gives a convenience estimate, not a certified measurement. Do not rely on it for safety-critical decisions \u2014 especially with propane.</string>
+    <!-- Safety disclaimer (spec section 11) + RV black/grey hygiene note (re-scope section 4). -->
+    <string name="disclaimer">TapGauge gives a convenience estimate, not a certified measurement. Don\u2019t rely on it for safety-critical decisions.</string>
+    <string name="disclaimer_waste">Never calibrate a black tank with actual waste. Use Driveway Calibration with clean water instead, then dump and rinse before use.</string>
 
     <string name="mic_rationale_title">TapGauge needs your microphone</string>
     <string name="mic_rationale_body">To hear the tank\u2019s resonance when you tap it. Audio is analyzed on your phone, never recorded to a file, and never sent anywhere.</string>

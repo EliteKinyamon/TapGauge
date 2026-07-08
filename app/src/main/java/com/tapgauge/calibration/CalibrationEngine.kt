@@ -234,6 +234,18 @@ class CalibrationEngine(
 
     companion object {
         /**
+         * Ingestion helper for Driveway Calibration (RV re-scope section 3.3): convert a
+         * cumulative added-volume + tank capacity into a known-level percent, which
+         * is then handed to the EXISTING [addAnchor]/fit path unchanged. This is new
+         * plumbing, NOT new curve math -- the monotonic linear-interp fit is untouched.
+         * Returns null if capacity is unusable.
+         */
+        fun percentFromCumulativeGallons(cumulativeGallons: Double, capacityGallons: Double): Double? {
+            if (capacityGallons <= 0.0) return null
+            return (cumulativeGallons / capacityGallons * 100.0).coerceIn(0.0, 100.0)
+        }
+
+        /**
          * Days-until-empty from recent (timestampSeconds, percent) points
          * (spec section 3.4). Honest linear least-squares slope; returns null if the
          * tank isn't clearly depleting or there isn't enough data. We avoid
